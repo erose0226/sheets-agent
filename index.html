@@ -568,6 +568,7 @@ input[type="text"]:focus {
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 const CLIENT_ID = '96394365441-pip5mprb834enbeqb2epqk2eo2e9be2j.apps.googleusercontent.com';
+const ANTHROPIC_KEY = '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';
 const SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 
 let accessToken = null;
@@ -787,7 +788,12 @@ RULES:
 async function callClaude(msgs) {
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
