@@ -515,6 +515,10 @@ input[type="text"]:focus {
       <span id="user-pill-text">Connected</span>
     </div>
     <div class="field">
+      <label>Anthropic API Key</label>
+      <input type="password" id="api-key" placeholder="sk-ant-..." />
+    </div>
+    <div class="field">
       <label>Sheet URL</label>
       <input type="text" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/..." />
     </div>
@@ -568,7 +572,7 @@ input[type="text"]:focus {
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 const CLIENT_ID = '96394365441-pip5mprb834enbeqb2epqk2eo2e9be2j.apps.googleusercontent.com';
-const ANTHROPIC_KEY = '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';
+let ANTHROPIC_KEY = '';
 const SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 
 let accessToken = null;
@@ -656,11 +660,14 @@ async function sheetsPost(path, body) {
 }
 
 async function connectSheet() {
+  const apiKey = document.getElementById('api-key').value.trim();
   const url = document.getElementById('sheet-url').value.trim();
   const tab = document.getElementById('tab-name').value.trim();
   const errEl = document.getElementById('connect-err');
   errEl.classList.add('hidden');
 
+  if (!apiKey) return showErr(errEl, 'Paste your Anthropic API key.');
+  ANTHROPIC_KEY = apiKey;
   if (!url) return showErr(errEl, 'Paste a Google Sheet URL.');
   if (!tab) return showErr(errEl, 'Enter the tab name.');
   const id = extractId(url);
